@@ -36,6 +36,7 @@ namespace SUT23_Labb1_LINQ
             bool programRunning = false;
             while (!programRunning)
             {
+                Console.Clear();
                 Console.WriteLine("Option [1] Retreive all Teachers by Subject");
                 Console.WriteLine("Option [2] Retreive all Students by Teacher");
                 Console.WriteLine("Option [3] Look up Subject");
@@ -47,7 +48,9 @@ namespace SUT23_Labb1_LINQ
                 switch (option)
                 {
                     case "1":
+                        Console.Clear();
                         RetrieveTeacherBySubject(context);
+                        Console.ReadKey();
                         break;
                     case "2":
                         Console.Clear();
@@ -55,12 +58,19 @@ namespace SUT23_Labb1_LINQ
                         Console.ReadKey();
                         break;
                     case "3":
+                        Console.Clear();
                         RetrieveSubject(context);
+                        Console.ReadKey();
                         break;
                     case "4":
+                        Console.Clear();
+                        EditSubject(context);
+                        Console.ReadKey();
                         break;
                     case "5":
-                        
+                        Console.Clear();
+                        UpdateTeacher(context);
+                        Console.ReadKey();
                         break;
                     case "6":
                         programRunning = true;
@@ -116,6 +126,35 @@ namespace SUT23_Labb1_LINQ
             else
             {
                 Console.WriteLine("No, the subject is not thought at the school");
+            }
+        }
+        private static void EditSubject(SchoolDbContext context)
+        {
+            Console.WriteLine("Enter Subject...");
+            Console.Write("Subject: ");
+            string input = Console.ReadLine();
+            Console.Write("New Name: ");
+            string editInput = Console.ReadLine();
+            var subjectToEdit = context.Subjects.FirstOrDefault(s => s.SubjectName == "Programmering2");
+            if (subjectToEdit != null)
+            {
+                subjectToEdit.SubjectName = editInput;
+                context.SaveChanges();
+            }
+        }
+        private static void UpdateTeacher(SchoolDbContext context)
+        {
+            Console.WriteLine("Enter the Name of the Teacher...");
+            Console.Write("Name: ");
+            string teacherName = Console.ReadLine();
+            Console.WriteLine("Enter New Name");
+            Console.Write("Name: ");
+            string updateName = Console.ReadLine();
+            var studentToUpdate = context.Students.FirstOrDefault(s => s.Teacher.Name == teacherName);
+            if (studentToUpdate != null)
+            {
+                studentToUpdate.Teacher = context.Teachers.FirstOrDefault(t => t.Name == updateName);
+                context.SaveChanges();
             }
         }
     }
