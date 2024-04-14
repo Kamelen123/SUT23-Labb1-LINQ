@@ -133,28 +133,49 @@ namespace SUT23_Labb1_LINQ
             Console.WriteLine("Enter Subject...");
             Console.Write("Subject: ");
             string input = Console.ReadLine();
-            Console.Write("New Name: ");
+            Console.Write("New Subject Name: ");
             string editInput = Console.ReadLine();
-            var subjectToEdit = context.Subjects.FirstOrDefault(s => s.SubjectName == "Programmering2");
+            var subjectToEdit = context.Subjects.FirstOrDefault(s => s.SubjectName == input);
             if (subjectToEdit != null)
             {
                 subjectToEdit.SubjectName = editInput;
                 context.SaveChanges();
+                Console.WriteLine($"Updated Subject from {input} to {editInput}.");
+            }
+            else
+            {
+                Console.WriteLine("Subject not found.");
             }
         }
         private static void UpdateTeacher(SchoolDbContext context)
         {
-            Console.WriteLine("Enter the Name of the Teacher...");
+            Console.WriteLine("Enter the Name of the Student...");
             Console.Write("Name: ");
-            string teacherName = Console.ReadLine();
-            Console.WriteLine("Enter New Name");
+            string studentName = Console.ReadLine();
+            Console.WriteLine("Enter New Teachers Name");
             Console.Write("Name: ");
-            string updateName = Console.ReadLine();
-            var studentToUpdate = context.Students.FirstOrDefault(s => s.Teacher.Name == teacherName);
+            string newTeacherName = Console.ReadLine();
+            var studentToUpdate = context.Students.FirstOrDefault(s => s.Name == studentName);
+
             if (studentToUpdate != null)
             {
-                studentToUpdate.Teacher = context.Teachers.FirstOrDefault(t => t.Name == updateName);
-                context.SaveChanges();
+                var newTeacher = context.Teachers.FirstOrDefault(t => t.Name == newTeacherName);
+
+                if (newTeacher != null)
+                {
+                    studentToUpdate.Teacher = newTeacher;
+                    
+                    context.SaveChanges();
+                    Console.WriteLine($"Updated teacher for student {studentName} to {newTeacherName}.");
+                }
+                else
+                {
+                    Console.WriteLine($"Teacher {newTeacherName} not found.");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Student {studentName} not found.");
             }
         }
     }
